@@ -1,0 +1,7 @@
+indicator,notes
+203.0.113.50,Seen in proxy logs
+evil-portal[.]example[.]com,"Phishing host,
+reported by two users"
+hxxps://example[.]org/invoice?id=99,Delivered via email
+d41d8cd98f00b204e9800998ecf8427e,MD5 of dropped attachment
+report.pdf,Attachment name (not a domain)

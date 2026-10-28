@@ -1,0 +1,14 @@
+2026-10-27T08:14:02Z INFO sshd[2211]: accepted publickey for deploy from 198.51.100.23 port 52144
+2026-10-27T08:15:40Z WARN proxy: blocked request to hxxp://downloads.example[.]net/payload/update.exe
+2026-10-27T08:15:41Z INFO av: quarantined update.exe sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+2026-10-27T08:16:03Z WARN fw: denied outbound to 203.0.113.77:4444 from 192.0.2.15
+2026-10-27T08:16:10Z ERROR parser: malformed source address 300.12.1.9 in record 4471
+2026-10-27T08:17:22Z INFO dns: query cdn.example.org type A from 192.0.2.15
+2026-10-27T08:18:05Z WARN proxy: blocked request to hxxps[://]login-portal.example[.]com/verify?id=7781
+2026-10-27T08:18:06Z INFO mail: message from alerts@example.org delivered to analyst@example.com
+2026-10-27T08:19:30Z INFO edr: process image hash md5=d41d8cd98f00b204e9800998ecf8427e
+2026-10-27T08:20:12Z WARN fw: denied inbound 198.51.100.200 -> 192.0.2.15:3389
+2026-10-27T08:21:45Z INFO proxy: allowed request to https://www.example.com/index.html
+2026-10-27T08:22:01Z WARN edr: suspicious child process of update.exe (pid 4120)
+2026-10-27T08:23:18Z INFO dns: query portal.example(.)com type A from 192.0.2.15
+2026-10-27T08:24:59Z INFO fw: denied outbound to 203.0.113.77:4444 from 192.0.2.16
