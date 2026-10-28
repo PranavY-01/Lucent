@@ -15,6 +15,12 @@ ROOT = Path(__file__).resolve().parent.parent
 REPORT = ROOT / "samples" / "incident_report.txt"
 MIXED = ROOT / "tests" / "fixtures" / "mixed"
 BANNER_ROW = "|______|  \\____/   \\_____| |______| |_| \\_|    |_|"
+_ANSI = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
+
+
+def _plain(text: str) -> str:
+    """Strip ANSI codes; Typer forces colour for help when GITHUB_ACTIONS is set."""
+    return _ANSI.sub("", text)
 
 
 def _buffer_console(encoding: str = "utf-8", color: bool = False) -> tuple[Console, io.BytesIO]:
@@ -61,15 +67,17 @@ def test_banner_is_ascii():
 
 
 def test_truecolor_output_uses_whole_palette():
-    console, raw = _buffer_console(color=True)
+    # Read colours from the style objects (HTML export), not from ANSI codes: Rich caches
+    # each style's ANSI string, so codes depend on what earlier tests rendered.
+    console = Console(file=io.StringIO(), record=True, width=100, legacy_windows=False)
     report = run_scan(MIXED)
     ui.print_banner(console)
     ui.print_summary(console, report, [], show_table=True, table_rows=5)
-    out = _text(console, raw)
+    html = console.export_html(inline_styles=True)
     for color in ui.GRADIENT:
-        r, g, b = (int(color[i : i + 2], 16) for i in (1, 3, 5))
-        assert f"38;2;{r};{g};{b}" in out
-    assert len(set(re.findall(r"38;2;(\d+;\d+;\d+)", out))) > 50
+        assert f"color: {color}" in html
+    assert len(set(re.findall(r"color: (#[0-9a-f]{6})", html))) > 50
+    assert "font-weight: bold" in html
 
 
 def test_no_color_environment_is_respected(monkeypatch):
@@ -103,23 +111,25 @@ def test_big_number_digits():
 def test_bare_lucent_shows_welcome():
     result = runner.invoke(app, [])
     assert result.exit_code == 0
-    assert BANNER_ROW in result.stdout
-    assert "QUICK START" in result.stdout
-    assert "lucent scan --help" in result.stdout
+    out = _plain(result.stdout)
+    assert BANNER_ROW in out
+    assert "QUICK START" in out
+    assert "lucent scan --help" in out
 
 
 def test_help_screens_show_banner():
     for args in (["--help"], ["scan", "--help"]):
         result = runner.invoke(app, args)
         assert result.exit_code == 0
-        assert BANNER_ROW in result.stdout
-        assert "Usage:" in result.stdout
+        out = _plain(result.stdout)
+        assert BANNER_ROW in out
+        assert "Usage:" in out
 
 
 def test_scan_summary_sections():
     result = runner.invoke(app, ["scan", str(MIXED)])
     assert result.exit_code == 3
-    out = result.stdout
+    out = _plain(result.stdout)
     assert BANNER_ROW in out
     for marker in ("SCAN REPORT", "FILES", "IOCS", "REJECTED", "WARNINGS", "ERRORS", "ATTENTION", "PARTIAL"):
         assert marker in out
@@ -129,15 +139,16 @@ def test_scan_summary_sections():
 
 def test_no_attention_block_when_clean():
     result = runner.invoke(app, ["scan", str(REPORT)])
-    assert "ATTENTION" not in result.stdout
-    assert "COMPLETED" in result.stdout
+    out = _plain(result.stdout)
+    assert "ATTENTION" not in out
+    assert "COMPLETED" in out
 
 
 def test_banner_goes_to_stderr_with_stdout_output():
     result = runner.invoke(app, ["scan", str(REPORT), "--output", "-"])
     assert result.exit_code == 0
     json.loads(result.stdout)
-    assert BANNER_ROW in result.stderr
+    assert BANNER_ROW in _plain(result.stderr)
 
 
 def test_quiet_has_no_banner():

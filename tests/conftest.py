@@ -16,6 +16,13 @@ def _block_network(monkeypatch):
     monkeypatch.setattr(socket, "create_connection", guard)
 
 
+@pytest.fixture(autouse=True)
+def _plain_terminal(monkeypatch):
+    # Tests compare plain text; a developer's colour-forcing variables must not add ANSI codes.
+    for name in ("FORCE_COLOR", "PY_COLORS", "TTY_COMPATIBLE", "TTY_INTERACTIVE"):
+        monkeypatch.delenv(name, raising=False)
+
+
 @pytest.fixture
 def frozen_clock():
     return lambda: FROZEN_TIME
