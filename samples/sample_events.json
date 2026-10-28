@@ -1,0 +1,27 @@
+{
+  "source": "synthetic-edr",
+  "generated": "2026-10-27T09:00:00Z",
+  "events": [
+    {
+      "id": 1,
+      "message": "Beacon to https://c2.example.net/api/checkin observed",
+      "src ip": "192.0.2.44"
+    },
+    {
+      "id": 2,
+      "message": "DNS lookup for update.example.org",
+      "tags": ["dns", "hxxp://files.example[.]com/drop.bin"]
+    },
+    {
+      "id": 3,
+      "message": "Dropped file sha1 da39a3ee5e6b4b0d3255bfef95601890afd80709",
+      "count": 3,
+      "quarantined": true,
+      "note": null
+    }
+  ],
+  "analyst": {
+    "name": "Example Analyst",
+    "contact": "soc@example.com"
+  }
+}

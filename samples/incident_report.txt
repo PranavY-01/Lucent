@@ -1,0 +1,8 @@
+Incident ID: DEMO-001
+Observed address: 203.0.113.10
+Reported host: example[.]com
+Reported URL: hxxps://example[.]com/test?id=42
+SHA256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Attachment: invoice.zip
+Contact: analyst@example.org
+Repeated address: 203.0.113.10
