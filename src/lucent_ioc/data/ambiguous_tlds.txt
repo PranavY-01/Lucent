@@ -1,0 +1,15 @@
+# TLDs that are also common file extensions.
+# A bare, non-defanged domain ending in one of these is rejected
+# unless --allow-ambiguous-tlds is set. Only entries also present
+# in tlds.txt have any effect.
+zip
+mov
+sh
+py
+pl
+rs
+md
+ps
+so
+cab
+one
